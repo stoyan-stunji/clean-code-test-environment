@@ -19,6 +19,7 @@ public class CheckItemCommand<T extends Item> implements Command {
         this.date = date;
     }
 
+    // TODO: Do not check with NULL, change it;
     public boolean execute() {
         if (date != null) {
             return returnWaterContentFromFile();
