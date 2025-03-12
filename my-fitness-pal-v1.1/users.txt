@@ -1,3 +1,0 @@
-1 admin admin
-2 test test
-3 manager manager
