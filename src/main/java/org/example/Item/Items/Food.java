@@ -1,30 +1,21 @@
 package org.example.Item.Items;
 
 import org.example.Item.Item;
+import org.example.Item.Items.FoodDetails.FoodMacros;
+import org.example.Item.Items.FoodDetails.FoodServingDetails;
 
 public class Food extends Item {
     private final String name;
     private final String description;
-    private final Integer servingSize;
-    private final Integer numberOfServings;
-    private final Double calories;
-    private final Double carbs;
-    private final Double fats;
-    private final Double protein;
+    private final FoodServingDetails servingDetails;
+    private final FoodMacros macros;
 
-    public Food(String username, String name, String description,
-                Integer servingSize, Integer numberOfServings,
-                Double calories, Double carbs, Double fats, Double protein) {
+    public Food(String username, String name, String description, FoodServingDetails servingDetails, FoodMacros macros) {
         super(username);
         this.name = name;
         this.description = description;
-        this.servingSize = servingSize;
-        this.numberOfServings = numberOfServings;
-
-        this.calories = calories;
-        this.carbs = carbs;
-        this.fats = fats;
-        this.protein = protein;
+        this.servingDetails = servingDetails;
+        this.macros = macros;
     }
 
     public String getName() {
@@ -35,35 +26,31 @@ public class Food extends Item {
         return description;
     }
 
-    public Integer getServingSize() {
-        return servingSize;
+    public FoodServingDetails getServingDetails() {
+        return servingDetails;
     }
 
-    public Integer getNumberOfServings() {
-        return numberOfServings;
-    }
-
-    public Double getCalories() {
-        return calories * numberOfServings;
-    }
-
-    public Double getCarbs() {
-        return carbs * numberOfServings;
-    }
-
-    public Double getFats() {
-        return fats * numberOfServings;
-    }
-
-    public Double getProtein() {
-        return protein * numberOfServings;
+    public FoodMacros getMacros() {
+        return macros;
     }
 
     public String toString() {
-        return String.format(
-                "%s (%dg; %.1fg kcal; %.1fg, %.1fg, %.1fg)" + " " + description,
-                name, servingSize, calories * numberOfServings, carbs * numberOfServings,
-                fats * numberOfServings, protein * numberOfServings);
-    }
+        int servingSize = servingDetails.servingSize();
+        int numberOfServings = servingDetails.numberOfServings();
+        double calories = macros.calories();
+        double carbs = macros.carbs();
+        double fats = macros.fats();
+        double protein = macros.protein();
 
+        return String.format(
+                "%s (%dg; %.1f kcal; %.1fg, %.1fg, %.1fg) %s",
+                name,
+                servingSize,
+                calories * numberOfServings,
+                carbs * numberOfServings,
+                fats * numberOfServings,
+                protein * numberOfServings,
+                description
+        );
+    }
 }
