@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="e58e019d-287e-47b8-ab38-d060b5db28cd" name="Changes" comment="" />
+=======
+    <list default="true" id="db14d533-4e20-4d7a-9fbf-9cf2a102691e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+>>>>>>> 2cc489124a1a8aace7204f03e847e0479ea37e90
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,6 +38,7 @@
       </state>
     </system>
   </component>
+<<<<<<< HEAD
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -63,10 +70,37 @@
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
+=======
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "stoyan-stunji"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/stoyan-stunji/clean-code-test-environment.git",
+    "accountId": "05b826c6-1090-4ca5-97f4-24e3c066a33f"
+  }
+}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2uEHuDGNl9qqXJCL3J4dLjy3ZWv" />
+>>>>>>> 2cc489124a1a8aace7204f03e847e0479ea37e90
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< HEAD
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
@@ -83,6 +117,24 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+=======
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "FixItemPoly",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Dji/3_education/university_FMI_1-4_course/semester_6/clean-code-test-environment",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+>>>>>>> 2cc489124a1a8aace7204f03e847e0479ea37e90
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -94,6 +146,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
+<<<<<<< HEAD
       <changelist id="e58e019d-287e-47b8-ab38-d060b5db28cd" name="Changes" comment="" />
       <created>1741869427356</created>
       <option name="number" value="Default" />
@@ -102,6 +155,15 @@
       <workItem from="1741869428911" duration="4489000" />
       <workItem from="1741873975982" duration="14000" />
       <workItem from="1741875606643" duration="107000" />
+=======
+      <changelist id="db14d533-4e20-4d7a-9fbf-9cf2a102691e" name="Changes" comment="" />
+      <created>1741807033680</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1741807033680</updated>
+      <workItem from="1741807035400" duration="2198000" />
+      <workItem from="1741864880900" duration="909000" />
+>>>>>>> 2cc489124a1a8aace7204f03e847e0479ea37e90
     </task>
     <servers />
   </component>

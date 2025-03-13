@@ -1,13 +1,15 @@
 package org.example.Menu;
 
 import org.example.Commands.CommandInvoker;
-import org.example.Item.Bank.ItemFileBankImpl;
-import org.example.Item.Items.Food;
-import org.example.Item.Items.Water;
-import org.example.Item.Utility.ItemUtilityImpl;
+import org.example.Item.Bank.Food.FoodBankImpl;
+import org.example.Item.Bank.Water.WaterBankImpl;
+import org.example.Item.Utility.Food.FoodUtility;
+import org.example.Item.Utility.Food.FoodUtilityImpl;
+import org.example.Item.Utility.Water.WaterUtility;
+import org.example.Item.Utility.Water.WaterUtilityImpl;
 import org.example.User.Bank.UserFileBankImpl;
-import org.example.User.Utils.UserUtils;
-import org.example.User.Utils.UserUtilsImpl;
+import org.example.User.Utils.UserUtility;
+import org.example.User.Utils.UserUtilityImpl;
 
 import java.util.Scanner;
 
@@ -67,13 +69,11 @@ public class MenuRunner {
     {
         CommandInvoker invoker = new CommandInvoker();
         UserFileBankImpl userRepository = new UserFileBankImpl();
-        UserUtils userService = new UserUtilsImpl(userRepository);
-        Water water = new Water(null, null, null);
-        Food food = new Food(null, null, null, null, null, null, null, null, null);
-        ItemFileBankImpl<Water> waterBank = new ItemFileBankImpl<Water>(water);
-        ItemUtilityImpl<Water> waterUtility = new ItemUtilityImpl<>(waterBank);
-        ItemFileBankImpl<Food> foodBank = new ItemFileBankImpl<Food>(food);
-        ItemUtilityImpl<Food> foodUtility = new ItemUtilityImpl<>(foodBank);
+        UserUtility userService = new UserUtilityImpl(userRepository);
+        WaterBankImpl waterBank = new WaterBankImpl();
+        WaterUtility waterUtility = new WaterUtilityImpl(waterBank);
+        FoodBankImpl foodBank = new FoodBankImpl();
+        FoodUtility foodUtility = new FoodUtilityImpl(foodBank);
 
         menu = new Menu(scanner, invoker, userService, waterUtility, waterBank, foodUtility, foodBank);
         return true;

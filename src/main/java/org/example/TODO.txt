@@ -1,4 +1,5 @@
 1) Fix Register then Login not working;
 2) (!) Unit Testing - make them work;
-3) Fix T Unsafe
-4) Add logging of food
+3) Fix saving after operation
+4) Fix 6th Command
+5) Fix title of foods of user APPEND! add desc
