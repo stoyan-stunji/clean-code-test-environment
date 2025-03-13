@@ -1,14 +1,14 @@
 package org.example.Commands.ConcreteCommands.UserCommands;
 
 import org.example.Commands.Command;
-import org.example.User.Utils.UserUtils;
+import org.example.User.Utils.UserUtility;
 
 public class UserRegisterCommand implements Command {
-    private final UserUtils userService;
+    private final UserUtility userService;
     private final String username;
     private final String password;
 
-    public UserRegisterCommand(UserUtils userService, String username, String password) {
+    public UserRegisterCommand(UserUtility userService, String username, String password) {
         this.userService = userService;
         this.username = username;
         this.password = password;
