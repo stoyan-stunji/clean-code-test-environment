@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface WaterBank
 {
-    boolean save(Water water);
-    Optional<String> returnContentFromFile(String username, String date);
+    boolean saveForUser(Water water);
+    String returnContentFromFileForUser(String username, String date);
 }

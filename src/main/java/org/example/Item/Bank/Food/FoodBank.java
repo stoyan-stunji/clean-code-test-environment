@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface FoodBank
 {
-    boolean save(Food item);
-    Optional<String> returnContentFromFile(String username);
+    boolean saveForUser(Food food);
+    boolean saveToAllFoodsFile(Food food);
+    String returnContentFromFileForUser(String username, String date);
 }

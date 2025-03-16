@@ -11,6 +11,6 @@ public class FoodUtilityImpl implements FoodUtility {
     }
 
     public boolean saveItemDetailsToFile(String username, Food food) {
-        return foodBank.save(food);
+        return foodBank.saveForUser(food) & foodBank.saveToAllFoodsFile(food);
     }
 }

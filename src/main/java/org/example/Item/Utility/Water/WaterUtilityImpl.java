@@ -12,6 +12,6 @@ public class WaterUtilityImpl implements WaterUtility {
     }
 
     public boolean saveItemDetailsToFile(String username, Water water) {
-        return waterBank.save(water);
+        return waterBank.saveForUser(water);
     }
 }
