@@ -21,27 +21,18 @@ public class Food extends Item {
         this.macros = macros;
     }
 
-    // TODO Fix the parsing;
     public static Food parseFromFileLine(String username, String line) {
         try {
             String[] parts = line.split(" ", 30);
             String name = parts[0];
-            String numberOfServings = parts[1];
-            String xSymbol = parts[2];
-            String foodName = parts[3];
-            String servingSize = parts[4];
-            String calories = parts[5];
-            String kcal = parts[6];
-            String carbs = parts[7];
-            String g1 = parts[8];
-            String fats = parts[9];
-            String g2 = parts[10];
-            String protein = parts[11];
-            String g3 = parts[12];
-
+            String servingSize = parts[1];
+            String numberOfServings = parts[2];
+            String calories = parts[3];
+            String carbs = parts[5];
+            String fats = parts[7];
+            String protein = parts[9];
             FoodServingDetails servingDetails = new FoodServingDetails(servingSize, numberOfServings);
             FoodMacros macros = new FoodMacros(calories, carbs, fats, protein);
-
             return new Food(username, name, "", servingDetails, macros);
         } catch (Exception e) {
             throw new RuntimeException("Food::parseFromFileLine::parsing_error", e);
@@ -80,6 +71,7 @@ public class Food extends Item {
     }
 
     public String formatForFileSaving() {
+        String numberOfServings = servingDetails.numberOfServings();
         String servingSize = servingDetails.servingSize();
         String calories = macros.calories();
         String carbs = macros.carbs();
@@ -87,9 +79,10 @@ public class Food extends Item {
         String protein = macros.protein();
 
         return String.format(
-                "%s %s %s kcal %s g %s g %s g %s",
+                "%s %s %s %s kcal %s g %s g %s g %s",
                 name,
                 servingSize,
+                numberOfServings,
                 calories,
                 carbs,
                 fats,

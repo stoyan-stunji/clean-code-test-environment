@@ -2,6 +2,7 @@ package org.example.Menu;
 
 import org.example.Commands.Command;
 import org.example.Commands.CommandInvoker;
+import org.example.Commands.CommandType;
 import org.example.Commands.FoodCommands.CreateFoodCommand;
 import org.example.Commands.FoodCommands.LogFoodCommand;
 import org.example.Commands.FoodCommands.ViewAllFoodsCommand;
@@ -12,8 +13,6 @@ import org.example.Commands.UserCommands.UserLogoutCommand;
 import org.example.Commands.UserCommands.UserRegisterCommand;
 import org.example.Commands.WaterCommands.CheckWaterCommand;
 import org.example.Commands.WaterCommands.DrinkWaterCommand;
-import org.example.Item.Repository.Food.FoodRepo;
-import org.example.Item.Repository.Water.WaterRepo;
 import org.example.Item.Items.Food;
 import org.example.Item.Items.FoodDetails.FoodMacros;
 import org.example.Item.Items.FoodDetails.FoodServingDetails;
@@ -21,13 +20,9 @@ import org.example.Item.Items.Water;
 import org.example.Item.Service.Food.FoodService;
 import org.example.Item.Service.Water.WaterService;
 import org.example.User.Service.UserService;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Menu {
-    private final Map<Integer, Boolean> commands = new HashMap<>();
     private final Scanner scanner;
     private final CommandInvoker invoker;
     private final UserService userService;
@@ -44,21 +39,23 @@ public class Menu {
     }
 
     public boolean executeCommand(int commandId) {
-        return switch (commandId) {
-            case 1 -> registerUser();
-            case 2 -> loginUser();
-            case 3 -> logoutUser();
-            case 4 -> exitApplication();
-            case 5 -> drinkWater();
-            case 6 -> checkWaterIntake();
-            case 7 -> createFood();
-            case 8 -> viewAllFoods();
-            case 9 -> logFood();
-            case 10 -> viewLoggedFoods();
-            default -> {
-                System.out.println("Invalid command!");
-                yield false;
-            }
+        CommandType commandType = CommandType.fromId(commandId);
+        if (commandType == null) {
+            System.out.println("Invalid command!");
+            return false;
+        }
+
+        return switch (commandType) {
+            case REGISTER -> registerUser();
+            case LOGIN -> loginUser();
+            case LOGOUT -> logoutUser();
+            case EXIT -> exitApplication();
+            case DRINK_WATER -> drinkWater();
+            case CHECK_WATER_INTAKE -> checkWaterIntake();
+            case CREATE_FOOD -> createFood();
+            case VIEW_ALL_FOODS -> viewAllFoods();
+            case LOG_FOOD -> logFood();
+            case VIEW_LOGGED_FOODS -> viewLoggedFoods();
         };
     }
 
@@ -115,7 +112,7 @@ public class Menu {
         invoker.setCommand(command);
         boolean success = invoker.executeCommand();
         if (success) {
-            System.out.println("Successfully logged water intake on! " + dateOfDrinking);
+            System.out.println("Successfully logged water intake on " + dateOfDrinking);
         }
         return success;
     }

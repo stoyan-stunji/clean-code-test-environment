@@ -6,6 +6,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class FoodRepoFileImpl implements FoodRepo {
     // This is the directory where every user's info about the water intake is stored;
@@ -142,27 +144,39 @@ public class FoodRepoFileImpl implements FoodRepo {
     }
 
     public Food findById(int id) {
-        try {
-            Path filePath = Paths.get(allFoodsFile);
-            if (Files.exists(filePath)) {
-                try (BufferedReader reader = Files.newBufferedReader(filePath)) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        String[] parts = line.split(" ", 2);
-                        if (parts.length > 1) {
-                            try {
-                                int lineId = Integer.parseInt(parts[0]);
-                                if (lineId == id) {
-                                    return Food.parseFromFileLine("", parts[1]);
-                                }
-                            } catch (NumberFormatException ignored) {
-                            }
-                        }
-                    }
+        Path filePath = Paths.get(allFoodsFile);
+        if (Files.exists(filePath)) {
+            List<String> lines = readAllLines(filePath);
+            for (String line : lines) {
+                Food food = parseLine(line, id);
+                if (food != null) {
+                    return food;
                 }
             }
-        } catch (IOException e) {
-            throw new RuntimeException("FoodBankImpl::findById::unable_to_read_file");
+        }
+        // TODO Remove null;
+        return null;
+    }
+
+    private List<String> readAllLines(Path filePath) {
+        try (BufferedReader reader = Files.newBufferedReader(filePath)) {
+            return reader.lines().collect(Collectors.toList());
+        }
+        catch (IOException e) {
+            throw new RuntimeException("FoodBankImpl::readAllLines::unable_to_read_file");
+        }
+    }
+
+    private Food parseLine(String line, int id) {
+        String[] parts = line.split(" ", 2);
+        if (parts.length > 1) {
+            try {
+                int lineId = Integer.parseInt(parts[0]);
+                if (lineId == id) {
+                    return Food.parseFromFileLine("", parts[1]);
+                }
+            } catch (NumberFormatException ignored) {
+            }
         }
         return null;
     }

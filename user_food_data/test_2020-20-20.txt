@@ -1,4 +1,2 @@
-10 X sock 100 g kcal g g g g very g
-10 X sock 100 g kcal g g g g very g 
-450 X pasta 400 g kcal g g g g very g 
-450 X pasta 400 g kcal g g g g very g 
+2 X sock 100 2 45 kcal 45 g 45 g 45 g
+2 X beans 500 2 400 kcal 400 g 400 g 400 g 

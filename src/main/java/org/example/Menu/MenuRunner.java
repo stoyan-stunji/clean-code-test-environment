@@ -1,6 +1,7 @@
 package org.example.Menu;
 
 import org.example.Commands.CommandInvoker;
+import org.example.Commands.CommandType;
 import org.example.Item.Repository.Food.FoodRepoFileImpl;
 import org.example.Item.Repository.Water.WaterRepoFileImpl;
 import org.example.Item.Service.Food.FoodService;
@@ -17,10 +18,9 @@ public class MenuRunner {
     private final Scanner scanner = new Scanner(System.in);
     private Menu menu;
     private boolean running = true;
-    private static final int EXIT_CHOICE = 4;
 
     public MenuRunner() {
-        if(!initializeMemberData()) {
+        if (!initializeMemberData()) {
             throw new RuntimeException("MenuRunner::initializeMemberData()_failed!");
         }
     }
@@ -29,9 +29,9 @@ public class MenuRunner {
         while (running) {
             printMenu();
             int choice = getUserChoice();
-            if (choice == EXIT_CHOICE) {
-                if (!menu.executeCommand(EXIT_CHOICE)) {
-                    throw new RuntimeException("MenuRunner::run()_failed_to_execute_exit_command!");
+            if (choice == CommandType.EXIT.getId()) {
+                if (!menu.executeCommand(CommandType.EXIT.getId())) {
+                    throw new RuntimeException("MenuRunner::run_failed_to_execute_exit_command!");
                 }
                 running = false;
             } else {
@@ -43,32 +43,24 @@ public class MenuRunner {
         scanner.close();
     }
 
+    private void printMenu() {
+        System.out.println("Please select a command:");
+        for (CommandType type : CommandType.values()) {
+            System.out.printf("%02d. %s%n", type.getId(), type.getDescription());
+        }
+        System.out.print("Enter your choice: ");
+    }
+
     private int getUserChoice() {
         try {
             return Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
-            System.out.println("Invalid input! Please enter a number between 1 and " + EXIT_CHOICE + ".");
+            System.out.println("Invalid input! Please enter a valid number.");
             return -1;
         }
     }
 
-    private void printMenu() {
-        System.out.println("Please select a command:");
-        System.out.println("01. Register");
-        System.out.println("02. Login");
-        System.out.println("03. Logout");
-        System.out.println("04. Exit");
-        System.out.println("05. Drink Water");
-        System.out.println("06. Check Water Intake");
-        System.out.println("07. Create Food");
-        System.out.println("08. View All Foods");
-        System.out.println("09. Log Food");
-        System.out.println("10. View Logged Foods");
-        System.out.print("Enter your choice: ");
-    }
-
-    private boolean initializeMemberData()
-    {
+    private boolean initializeMemberData() {
         CommandInvoker invoker = new CommandInvoker();
         UserFileRepoImpl userRepository = new UserFileRepoImpl();
         UserService userService = new UserServiceImpl(userRepository);

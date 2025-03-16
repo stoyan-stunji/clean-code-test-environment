@@ -45,7 +45,7 @@ public class WaterRepoFileImpl implements WaterRepo {
 
     private boolean writeToFile(String filename, String mililitres) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
-            String line = mililitres.toString() + "\n";
+            String line = mililitres + "\n";
             writer.write(line);
             return true;
         } catch (IOException e) {
@@ -58,7 +58,8 @@ public class WaterRepoFileImpl implements WaterRepo {
         try {
             return extractContent(filename);
         } catch (IOException e) {
-            String exceptionMessage = "WaterBankImpl::returnContentFromFile::fail_to_read_file::" + filename;
+            String exceptionMessage = "WaterBankImpl::returnContentFromFile::fail_to_read_file::"
+                    + filename;
             throw new RuntimeException(exceptionMessage);
         }
     }
@@ -68,7 +69,8 @@ public class WaterRepoFileImpl implements WaterRepo {
         if (Files.exists(filePath)) {
             return Files.readString(filePath);
         }
-        String exceptionMessage = "WaterBankImpl::getContent::fail_to_read_file::" + filename;
+        String exceptionMessage = "WaterBankImpl::getContent::fail_to_read_file::"
+                + filename;
         throw new FileNotFoundException(exceptionMessage);
     }
 
