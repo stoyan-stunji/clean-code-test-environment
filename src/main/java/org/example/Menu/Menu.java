@@ -2,62 +2,60 @@ package org.example.Menu;
 
 import org.example.Commands.Command;
 import org.example.Commands.CommandInvoker;
-import org.example.Commands.ConcreteCommands.ItemCommands.CheckWaterIntakeCommand;
-import org.example.Commands.ConcreteCommands.ItemCommands.CreateFoodCommand;
-import org.example.Commands.ConcreteCommands.ItemCommands.LogWaterIntakeCommand;
-import org.example.Commands.ConcreteCommands.ItemCommands.ViewAllFoodsCommand;
-import org.example.Commands.ConcreteCommands.UserCommands.UserLoginCommand;
-import org.example.Commands.ConcreteCommands.UserCommands.UserLogoutCommand;
-import org.example.Commands.ConcreteCommands.UserCommands.UserRegisterCommand;
-import org.example.Item.Bank.Food.FoodBank;
-import org.example.Item.Bank.Water.WaterBank;
+import org.example.Commands.CommandType;
+import org.example.Commands.FoodCommands.CreateFoodCommand;
+import org.example.Commands.FoodCommands.LogFoodCommand;
+import org.example.Commands.FoodCommands.ViewAllFoodsCommand;
+import org.example.Commands.FoodCommands.ViewFoodsLogged;
+import org.example.Commands.UserCommands.ExitCommand;
+import org.example.Commands.UserCommands.UserLoginCommand;
+import org.example.Commands.UserCommands.UserLogoutCommand;
+import org.example.Commands.UserCommands.UserRegisterCommand;
+import org.example.Commands.WaterCommands.CheckWaterCommand;
+import org.example.Commands.WaterCommands.DrinkWaterCommand;
 import org.example.Item.Items.Food;
 import org.example.Item.Items.FoodDetails.FoodMacros;
 import org.example.Item.Items.FoodDetails.FoodServingDetails;
 import org.example.Item.Items.Water;
-import org.example.Item.Utility.Food.FoodUtility;
-import org.example.Item.Utility.Water.WaterUtility;
-import org.example.User.Utils.UserUtility;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.example.Item.Service.Food.FoodService;
+import org.example.Item.Service.Water.WaterService;
+import org.example.User.Service.UserService;
 import java.util.Scanner;
 
 public class Menu {
-    private final Map<Integer, Boolean> commands = new HashMap<>();
     private final Scanner scanner;
     private final CommandInvoker invoker;
-    private final UserUtility userService;
-    private final WaterUtility waterUtility;
-    private final WaterBank waterBank;
-    private final FoodUtility foodUtility;
-    private final FoodBank foodBank;
+    private final UserService userService;
+    private final WaterService waterService;
+    private final FoodService foodService;
     private String username = "";
 
-    public Menu(Scanner scanner, CommandInvoker invoker, UserUtility userService, WaterUtility waterUtility, WaterBank waterBank, FoodUtility foodUtility, FoodBank foodBank) {
+    public Menu(Scanner scanner, CommandInvoker invoker, UserService userService, WaterService waterService, FoodService foodService) {
         this.scanner = scanner;
         this.invoker = invoker;
         this.userService = userService;
-        this.waterUtility = waterUtility;
-        this.waterBank = waterBank;
-        this.foodUtility = foodUtility;
-        this.foodBank = foodBank;
+        this.waterService = waterService;
+        this.foodService = foodService;
     }
 
     public boolean executeCommand(int commandId) {
-        return switch (commandId) {
-            case 1 -> registerUser();
-            case 2 -> loginUser();
-            case 3 -> logWaterIntake();
-            case 4 -> checkWaterIntake();
-            case 5 -> createFood();
-            case 6 -> viewAllFood();
-            case 7 -> logoutUser();
-            case 8 -> exitApplication();
-            default -> {
-                System.out.println("Invalid command!");
-                yield false;
-            }
+        CommandType commandType = CommandType.fromId(commandId);
+        if (commandType == null) {
+            System.out.println("Invalid command!");
+            return false;
+        }
+
+        return switch (commandType) {
+            case REGISTER -> registerUser();
+            case LOGIN -> loginUser();
+            case LOGOUT -> logoutUser();
+            case EXIT -> exitApplication();
+            case DRINK_WATER -> drinkWater();
+            case CHECK_WATER_INTAKE -> checkWaterIntake();
+            case CREATE_FOOD -> createFood();
+            case VIEW_ALL_FOODS -> viewAllFoods();
+            case LOG_FOOD -> logFood();
+            case VIEW_LOGGED_FOODS -> viewLoggedFoods();
         };
     }
 
@@ -86,51 +84,9 @@ public class Menu {
         return success;
     }
 
-    private boolean logWaterIntake() {
-        if (!checkIfUserIsLoggedIn()) return false;
-        int amount = inputAmountOfWater();
-        String date = inputDate();
-        Water water = new Water(username, amount, date);
-        Command command = new LogWaterIntakeCommand(waterUtility, username, water);
-        invoker.setCommand(command);
-        return invoker.executeCommand();
-    }
-
-    private boolean checkWaterIntake() {
-        if (!checkIfUserIsLoggedIn()) return false;
-        String date = inputDate();
-        Command command = new CheckWaterIntakeCommand(waterBank, username, date);
-        invoker.setCommand(command);
-        return invoker.executeCommand();
-    }
-
-    private boolean createFood() {
-        if (!checkIfUserIsLoggedIn()) return false;
-        String name = inputName();
-        String description = inputDescription();
-        Integer servingsSize = inputServingSize();
-        Integer numberOfServings = inputNumberOfServings();
-        FoodServingDetails foodServingDetails = new FoodServingDetails(servingsSize, numberOfServings);
-        Double calories = inputCalories();
-        Double carbs = inputCarbs();
-        Double fats = inputFats();
-        Double proteins = inputProteins();
-        FoodMacros foodMacros = new FoodMacros(calories, carbs, fats, proteins);
-        Food food = new Food(username, name, description, foodServingDetails, foodMacros);
-        Command command = new CreateFoodCommand(foodUtility, username, food);
-        invoker.setCommand(command);
-        return invoker.executeCommand();
-    }
-
-    private boolean viewAllFood() {
-        if (!checkIfUserIsLoggedIn()) return false;
-        Command command = new ViewAllFoodsCommand(foodBank, username);
-        invoker.setCommand(command);
-        return invoker.executeCommand();
-    }
-
     private boolean logoutUser() {
-        Command command = new UserLogoutCommand(username);
+        if (!checkIfUserIsLoggedIn()) return false;
+        Command command = new UserLogoutCommand();
         invoker.setCommand(command);
         boolean success = invoker.executeCommand();
         if (success) {
@@ -141,8 +97,101 @@ public class Menu {
     }
 
     private boolean exitApplication() {
+        Command command = new ExitCommand();
+        invoker.setCommand(command);
         System.out.println("Exiting application...");
-        return true;
+        return invoker.executeCommand();
+    }
+
+    private boolean drinkWater() {
+        if (!checkIfUserIsLoggedIn()) return false;
+        String amount = inputAmountOfWater();
+        String dateOfDrinking = inputDate();
+        Water water = new Water(username, amount, dateOfDrinking);
+        Command command = new DrinkWaterCommand(waterService, water);
+        invoker.setCommand(command);
+        boolean success = invoker.executeCommand();
+        if (success) {
+            System.out.println("Successfully logged water intake on " + dateOfDrinking);
+        }
+        return success;
+    }
+
+    private boolean checkWaterIntake() {
+        if (!checkIfUserIsLoggedIn()) return false;
+        String date = inputDate();
+        Command command = new CheckWaterCommand(waterService, username, date);
+        invoker.setCommand(command);
+        return invoker.executeCommand();
+    }
+
+    private boolean createFood() {
+        if (!checkIfUserIsLoggedIn()) return false;
+        Food food = gatherFoodDetails();
+        Command command = new CreateFoodCommand(foodService, food);
+        invoker.setCommand(command);
+        return invoker.executeCommand();
+    }
+
+    private boolean viewAllFoods() {
+        if (!checkIfUserIsLoggedIn()) return false;
+        Command command = new ViewAllFoodsCommand(foodService);
+        invoker.setCommand(command);
+        return invoker.executeCommand();
+    }
+
+    private boolean logFood() {
+        if (!checkIfUserIsLoggedIn()) return false;
+        String dateOfEating = inputDate();
+        String timeOfDay = inputTimeOfDay();
+        int id = inputId();
+        Command command = new LogFoodCommand(foodService, id, username, dateOfEating);
+        invoker.setCommand(command);
+        boolean success = invoker.executeCommand();
+        if (success) {
+            System.out.println("Successfully logged food on! " + dateOfEating);
+        }
+        return success;
+    }
+
+    private boolean viewLoggedFoods() {
+        if (!checkIfUserIsLoggedIn()) return false;
+        String dateOfEating = inputDate();
+        Command command = new ViewFoodsLogged(foodService, username, dateOfEating);
+        invoker.setCommand(command);
+        return invoker.executeCommand();
+    }
+
+    private Food gatherFoodDetails() {
+        String name = inputName();
+        String description = inputDescription();
+        FoodServingDetails foodServingDetails = gatherServingDetails();
+        FoodMacros foodMacros = gatherFoodMacros();
+        return new Food(username, name, description, foodServingDetails, foodMacros);
+    }
+
+    private FoodServingDetails gatherServingDetails() {
+        String servingsSize = inputServingSize();
+        String numberOfServings = inputNumberOfServings();
+        return new FoodServingDetails(servingsSize, numberOfServings);
+    }
+
+    private FoodMacros gatherFoodMacros() {
+        String calories = inputCalories();
+        String carbs = inputCarbs();
+        String fats = inputFats();
+        String proteins = inputProteins();
+        return new FoodMacros(calories, carbs, fats, proteins);
+    }
+
+    private String inputUsername() {
+        System.out.print("Enter username: ");
+        return scanner.nextLine();
+    }
+
+    private String inputPassword() {
+        System.out.print("Enter password: ");
+        return scanner.nextLine();
     }
 
     private boolean checkIfEntryDataIsCorrect() {
@@ -162,19 +211,9 @@ public class Menu {
         return true;
     }
 
-    private String inputUsername() {
-        System.out.print("Enter username: ");
-        return scanner.nextLine();
-    }
-
-    private String inputPassword() {
-        System.out.print("Enter password: ");
-        return scanner.nextLine();
-    }
-
-    private int inputAmountOfWater() {
+    private String inputAmountOfWater() {
         System.out.print("Enter amount of water (ml.): ");
-        return Integer.parseInt(scanner.nextLine());
+        return scanner.nextLine();
     }
 
     private String inputDate() {
@@ -192,33 +231,43 @@ public class Menu {
         return scanner.nextLine();
     }
 
-    private Integer inputServingSize() {
+    private String inputServingSize() {
         System.out.print("Enter serving size (g.): ");
-        return Integer.parseInt(scanner.nextLine());
+        return scanner.nextLine();
     }
 
-    private Integer inputNumberOfServings() {
+    private String inputNumberOfServings() {
         System.out.print("Enter servings per container: ");
-        return Integer.parseInt(scanner.nextLine());
+        return scanner.nextLine();
     }
 
-    private Double inputCalories() {
+    private String inputCalories() {
         System.out.print("Enter calories (kcal): ");
-        return Double.parseDouble(scanner.nextLine());
+        return scanner.nextLine();
     }
 
-    private Double inputCarbs() {
+    private String inputCarbs() {
         System.out.print("Enter carbs (g.): ");
-        return Double.parseDouble(scanner.nextLine());
+        return scanner.nextLine();
     }
 
-    private Double inputFats() {
+    private String inputFats() {
         System.out.print("Enter fat (g.): ");
-        return Double.parseDouble(scanner.nextLine());
+        return scanner.nextLine();
     }
 
-    private Double inputProteins() {
+    private String inputProteins() {
         System.out.print("Enter proteins (g.): ");
-        return Double.parseDouble(scanner.nextLine());
+        return scanner.nextLine();
+    }
+
+    private int inputId() {
+        System.out.print("Enter ID: ");
+        return scanner.nextInt();
+    }
+
+    private String inputTimeOfDay() {
+        System.out.print("Enter [breakfast, lunch, snacks, dinner]: ");
+        return scanner.nextLine();
     }
 }

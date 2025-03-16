@@ -1,5 +1,2 @@
-1) Fix Register then Login not working;
-2) (!) Unit Testing - make them work;
-3) Fix saving after operation
-4) Fix 6th Command
-5) Fix title of foods of user APPEND! add desc
+1) Fix: After a change, it doesn't save. It needs a reload.
+2) Unit Tests

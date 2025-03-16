@@ -1,0 +1,2 @@
+2 X sock 100 2 45 kcal 45 g 45 g 45 g
+2 X beans 500 2 400 kcal 400 g 400 g 400 g 
